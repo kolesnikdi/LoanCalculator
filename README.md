@@ -6,7 +6,9 @@ docker-compose up --build
 
 #### Local
 cd LoanCalculator
+
 python manage.py migrate
+
 python manage.py runserver 
 
 #### Test by Pytest
