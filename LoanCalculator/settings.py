@@ -8,9 +8,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 load_dotenv()  # for correct work os.environ.get()
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-jwu0x6%uz1%5751fe@r--^a5so2p+8ot9pha-vtxu#@inu32(p')
 
-HOST = os.environ.get('HOST_NAME')
+HOST = os.environ.get('HOST_NAME', 'http://127.0.0.1:8000')
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
