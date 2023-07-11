@@ -2,8 +2,9 @@ import datetime
 import pytest
 import random
 import uuid
-
 from dateutil.relativedelta import relativedelta
+
+from django.urls import reverse
 from rest_framework.test import APIClient
 
 from loan.models import Loans, Payments
@@ -36,7 +37,7 @@ class Randomizer:
 
     def loan_data(self):
         data = {
-            'loan_amount': self.random_digits_limit(4),
+            'loan_amount': self.random_digits_limit(6),
             'loan_start_date': datetime.date.today(),
             'periodicity_amount': self.random_digits_limit(2),
             'periodicity': self.random_time_period(),
@@ -48,26 +49,8 @@ class Randomizer:
 
 
 @pytest.fixture(scope='function')
-def custom_loan(randomizer):
-    loan = Loans.objects.create(contract=uuid.uuid4(), **randomizer.loan_data())
-    return loan
-
-
-@pytest.fixture(scope='function')
-def custom_payments(custom_loan, randomizer):
-    payments = []
-    new_amount = []
-    for _ in range(10):
-        amount = int(randomizer.random_digits_limit(3))
-        payment = Payments(
-            contract_id=custom_loan.id,
-            payment_date=datetime.date.today() + relativedelta(days=10),
-            principal_payment=amount,
-            interest_payment=randomizer.random_digits_limit(2),
-            is_active=True,
-        )
-        new_amount.append(amount)
-        payments.append(payment)
-    custom_loan.loan_amount = sum(new_amount)
-    payments_qs = Payments.objects.bulk_create(payments)
-    return payments_qs
+def client_with_loan_payments(api_client, randomizer):
+    response = api_client.post(reverse('create_loan'), data=randomizer.loan_data(), format='json')
+    api_client.loan = Loans.objects.filter(is_active=True).last()
+    api_client.pyaments = Payments.objects.filter(contract=api_client.loan, is_active=True)
+    return api_client
