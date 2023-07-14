@@ -19,6 +19,3 @@ RUN pip3 install -r requirements.txt
 
 # Copy project
 COPY ../.. .
-# Importante comande. Need for entrypoint.sh worck
-CMD ["bash", "-c", "chmod", "+x", "/LoanCalculator/Docker/entrypoint.sh"]
-ENTRYPOINT ["/LoanCalculator/Docker/entrypoint.sh"]
