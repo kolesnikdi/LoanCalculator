@@ -1,8 +1,6 @@
 import datetime
 import pytest
 import random
-import uuid
-from dateutil.relativedelta import relativedelta
 
 from django.urls import reverse
 from rest_framework.test import APIClient
@@ -50,7 +48,7 @@ class Randomizer:
 
 @pytest.fixture(scope='function')
 def client_with_loan_payments(api_client, randomizer):
-    response = api_client.post(reverse('create_loan'), data=randomizer.loan_data(), format='json')
+    api_client.post(reverse('create_loan'), data=randomizer.loan_data(), format='json')
     api_client.loan = Loans.objects.filter(is_active=True).last()
     api_client.pyaments = Payments.objects.filter(contract=api_client.loan, is_active=True)
     return api_client

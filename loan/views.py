@@ -24,7 +24,6 @@ class CreateLoanView(generics.CreateAPIView):
                 new_loan = Loans.objects.create(contract=uuid.uuid4(), **serializer.validated_data)
                 payments = create_payments(serializer.validated_data, new_loan.id)
                 response = self.serializer_class(instance=new_loan).data
-                #
                 response["payments"] = PaymentsListSerializer(payments, many=True).data
                 res_status = status.HTTP_200_OK
         except Exception as e:

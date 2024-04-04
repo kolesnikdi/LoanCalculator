@@ -1,5 +1,5 @@
 # Pull base image
-FROM python:3.10.2-slim-bullseye
+FROM python:3.10.12-slim-bullseye
 
 # Set environment variables
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
@@ -19,3 +19,11 @@ RUN pip3 install -r requirements.txt
 
 # Copy project
 COPY ../.. .
+# Запуск з entrypoint.sh. в docker-compose.yml прибрати "command:"
+#CMD ["bash", "-c", "chmod", "+x", "/LoanCalculator/Docker/entrypoint.sh"]
+#ENTRYPOINT ["/LoanCalculator/Docker/entrypoint.sh"]
+
+# те саме що і  23-24 стр. Варіант Запуску від Костянтина
+#CMD ["chmod", "777", "./Docker/entrypoint.sh"]
+#CMD ["bash", "-c", "chmod", "+x", "./Docker/entrypoint.sh"]
+#ENTRYPOINT ["./Docker/entrypoint.sh"]
